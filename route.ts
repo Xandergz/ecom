@@ -1,5 +1,13 @@
-import { NextResponse } from "next/server"
+import { NewUserRequest } from "@/app/types";
+import startDb from "@lib/db";
+import UserModel from "@models/userModel";
+import { NextResponse } from "next/server";
 
-export const GET =(req: Request)=>{
-   return NextResponse.json({ok: true, from: "from api"});
+export const POST = async (req: Request) =>{
+const body= (await req.json()) as NewUserRequest;
+await startDb();
+const newUser = await UserModel.create({
+...body,
+});
+   return NextResponse.json(newUser);
 };
